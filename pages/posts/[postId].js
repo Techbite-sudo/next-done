@@ -1,6 +1,13 @@
 import { useRouter } from "next/router"
 
 export default function Post({ post }){
+    const router = useRouter()
+    if(router.isFallback){
+        return(
+            <div>Loading...</div>
+        )
+    }
+    
     return(
         <div>
             <h1>Post</h1>
@@ -19,7 +26,12 @@ export async function getStaticProps(context){
 
     const response = await fetch(`https://jsonplaceholder.typicode.com/posts/${params.postId}`)
     const data  =await response.json()
-    console.log(data)
+    
+    if(!data.id){
+        return{
+            notFound: true,
+        }
+    }
 
     return{
         props: {
@@ -31,27 +43,27 @@ export async function getStaticProps(context){
 export async function getStaticPaths(){
     const response = await fetch('https://jsonplaceholder.typicode.com/posts')
     const data = await response.json()
-    const paths = data.map((post) => {
-        return{
-            params: {
-                postId: `${post.id}`
-            }
-        }
-    })
+    // const paths = data.map((post) => {
+    //     return{
+    //         params: {
+    //             postId: `${post.id}`
+    //         }
+    //     }
+    // })
     return{
-        // paths: [
-        //     {
-        //         params: { postId: "1" }
-        //     },
-        //     {
-        //         params: { postId: "2" }
-        //     },
-        //     {
-        //         params: { postId: "3"}
-        //     },
-        // ],
-        paths,
-        fallback: false
+        paths: [
+            {
+                params: { postId: "1" }
+            },
+            {
+                params: { postId: "2" }
+            },
+            {
+                params: { postId: "3"}
+            },
+        ],
+        // paths,
+        fallback: true
     }
 }
    
