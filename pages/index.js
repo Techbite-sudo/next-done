@@ -25,6 +25,9 @@ export default function Home() {
     <button onClick={handleClick}>
       Place order
     </button>
+    <Link href={'/posts'}>
+        <h1>Post</h1>
+    </Link>
    </>
   )
 }
